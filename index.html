@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulir Sewa Bot WhatsApp</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('https://files.catbox.moe/javj0s.jpg') no-repeat center center/cover;
+            color: white;
+        }
+        .container {
+            background: rgba(0, 0, 0, 0.85);
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.6);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            border: 1px solid #ff0000;
+            position: relative;
+        }
+        .avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 3px solid #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.8);
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: black;
+        }
+        h2 {
+            margin-top: 25px;
+            color: #ff0000;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid #ff0000;
+            background: black;
+            color: white;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+        }
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        button {
+            background: #ff0000;
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            width: 100%;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+        }
+        button:hover {
+            background: #d40000;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 1);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Avatar Bot -->
+        <img class="avatar" src="https://files.catbox.moe/5izf6o.jpeg" alt="Avatar Bot">
+        
+        <h2>Formulir Sewa Bot WhatsApp</h2>
+        <input type="text" id="linkgc" placeholder="Masukkan Link Grup WhatsApp">
+        <input type="number" id="waktu" placeholder="Durasi Waktu Sewa minimal 7 hari" min="7">
+        <button onclick="kirimWA()">Kirim</button>
+    </div>
+
+    <script>
+        function kirimWA() {
+            let linkGC = document.getElementById('linkgc').value.trim();
+            let waktu = document.getElementById('waktu').value.trim();
+
+            // Validasi Link Grup WhatsApp
+            if (!linkGC.includes("chat.whatsapp.com")) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'URL Tidak Valid!',
+                    text: "Masukkan Link Grup Whatsapp Yang Valid",
+                    confirmButtonColor: '#ff0000'
+                });
+                return;
+            }
+
+            // Validasi Waktu Sewa (minimal 7 hari)
+            if (!waktu.match(/^\d+$/) || waktu < 7) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Durasi Sewa Tidak Valid!',
+                    text: "Minimal sewa adalah 7 hari!",
+                    confirmButtonColor: '#ff0000'
+                });
+                return;
+            }
+
+            // Hitung harga sewa
+            let hargaSewa = Math.ceil((waktu * 333.3333333) * 1.007);
+            let hargaFormat = hargaSewa.toLocaleString('id-ID');
+
+            // Konfirmasi sebelum mengirim
+            Swal.fire({
+                title: "Konfirmasi Sewa",
+                html: `
+                    <b>Link Grup:</b> ${linkGC} <br>
+                    <b>Durasi:</b> ${waktu} hari <br>
+                    <b>Harga:</b> Rp ${hargaFormat} <br><br>
+                    Setelah mengirim pesanan, bot akan mengirim QRIS pembayaran.<br>
+                    Silakan lakukan pembayaran dalam waktu <b>15 menit</b> untuk menghindari pembatalan otomatis.
+                `,
+                icon: "info",
+                showCancelButton: true,
+                confirmButtonText: "Ya, Kirim Chat Ke Bot!",
+                cancelButtonText: "Batal",
+                confirmButtonColor: "#28a745",
+                cancelButtonColor: "#d33"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    let url = `https://wa.me/62856486407152?text=.sewa%20${encodeURIComponent(linkGC)}%20${waktu}`;
+                    window.location.href = url;
+                }
+            });
+        }
+    </script>
+</body>
+  </html>
+  
