@@ -12,11 +12,14 @@
             box-sizing: border-box;
             font-family: 'Arial', sans-serif;
         }
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
         body {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
             background: url('https://files.catbox.moe/javj0s.jpg') no-repeat center center/cover;
             color: white;
         }
@@ -83,9 +86,7 @@
 </head>
 <body>
     <div class="container">
-        <!-- Avatar Bot -->
         <img class="avatar" src="https://files.catbox.moe/5izf6o.jpeg" alt="Avatar Bot">
-        
         <h2>Formulir Sewa Bot WhatsApp</h2>
         <input type="text" id="linkgc" placeholder="Masukkan Link Grup WhatsApp">
         <input type="number" id="waktu" placeholder="Durasi Waktu Sewa minimal 7 hari" min="7">
@@ -97,7 +98,6 @@
             let linkGC = document.getElementById('linkgc').value.trim();
             let waktu = document.getElementById('waktu').value.trim();
 
-            // Validasi Link Grup WhatsApp
             if (!linkGC.includes("chat.whatsapp.com")) {
                 Swal.fire({
                     icon: 'error',
@@ -108,7 +108,6 @@
                 return;
             }
 
-            // Validasi Waktu Sewa (minimal 7 hari)
             if (!waktu.match(/^\d+$/) || waktu < 7) {
                 Swal.fire({
                     icon: 'error',
@@ -119,11 +118,9 @@
                 return;
             }
 
-            // Hitung harga sewa
             let hargaSewa = Math.ceil((waktu * 333.3333333) * 1.007);
             let hargaFormat = hargaSewa.toLocaleString('id-ID');
 
-            // Konfirmasi sebelum mengirim
             Swal.fire({
                 title: "Konfirmasi Sewa",
                 html: `
@@ -148,5 +145,4 @@
         }
     </script>
 </body>
-  </html>
-  
+</html>
