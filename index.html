@@ -54,7 +54,7 @@
             margin-top: 25px;
             color: #ff0000;
         }
-        input, select {
+        input {
             width: 100%;
             padding: 12px;
             margin: 10px 0;
@@ -94,14 +94,6 @@
         <h2>Formulir Sewa Bot WhatsApp</h2>
         <input type="text" id="linkgc" placeholder="Masukkan Link Grup WhatsApp">
         <input type="number" id="waktu" placeholder="Durasi Waktu Sewa minimal 7 hari" min="7">
-        
-        <select id="metode" required>
-            <option value="" disabled selected>Pilih Metode Pembayaran</option>
-            <option value="QRIS">QRIS</option>
-            <option value="Gopay">Gopay</option>
-            <option value="Dana">Dana</option>
-        </select>
-        
         <button onclick="kirimWA()">Cek Harga</button>
     </div>
 
@@ -109,7 +101,6 @@
         function kirimWA() {
             let linkGC = document.getElementById('linkgc').value.trim();
             let waktu = document.getElementById('waktu').value.trim();
-            let metode = document.getElementById('metode').value;
 
             if (!linkGC.includes("chat.whatsapp.com")) {
                 Swal.fire({
@@ -131,16 +122,6 @@
                 return;
             }
 
-            if (!metode) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Metode Pembayaran Belum Dipilih!',
-                    text: "Silakan pilih metode pembayaran.",
-                    confirmButtonColor: '#ff0000'
-                });
-                return;
-            }
-
             let hargaSewa = Math.ceil((waktu * 333.3333333) * 1.007);
             let hargaFormat = hargaSewa.toLocaleString('id-ID');
 
@@ -149,7 +130,6 @@
                 html: `
                     <b>Link Grup:</b> ${linkGC} <br>
                     <b>Durasi:</b> ${waktu} hari <br>
-                    <b>Pembayaran:</b> ${metode} <br>
                     <b>Harga:</b> Rp ${hargaFormat} <br><br>
                     Setelah mengirim pesanan, bot akan mengirim QRIS pembayaran.<br>
                     Silakan lakukan pembayaran dalam waktu <b>15 menit</b> untuk menghindari pembatalan otomatis.
@@ -162,7 +142,7 @@
                 cancelButtonColor: "#d33"
             }).then((result) => {
                 if (result.isConfirmed) {
-                    let url = `https://wa.me/62856486407152?text=.sewa%20${encodeURIComponent(linkGC)}%20${waktu}%20${encodeURIComponent(metode)}%20`;
+                    let url = `https://wa.me/62856486407152?text=.sewa%20${encodeURIComponent(linkGC)}%20${waktu}`;
                     window.location.href = url;
                 }
             });
