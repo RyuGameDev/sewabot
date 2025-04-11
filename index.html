@@ -86,14 +86,21 @@
       font-size: 16px;
     }
 
-    .choices__list--dropdown {
-      background: black;
-      color: white;
-      border: 2px solid #ff0000;
+    .choices__list--dropdown, 
+    .choices__list[aria-expanded] {
+      background-color: black !important;
+      border: 2px solid #ff0000 !important;
+      color: white !important;
+    }
+
+    .choices__item--selectable {
+      background-color: black !important;
+      color: white !important;
     }
 
     .choices__item--selectable.is-highlighted {
-      background: #d40000;
+      background-color: #d40000 !important;
+      color: white !important;
     }
 
     button {
@@ -115,12 +122,6 @@
       background: #d40000;
       box-shadow: 0 0 15px rgba(255, 0, 0, 1);
     }
-
-    #harga-info {
-      margin-top: 5px;
-      font-size: 14px;
-      color: #ccc;
-    }
   </style>
 </head>
 <body>
@@ -129,9 +130,9 @@
     <h2>Formulir Sewa Bot WhatsApp</h2>
     <input type="text" id="linkgc" placeholder="Masukkan Link Grup WhatsApp" />
     <input type="number" id="waktu" placeholder="Durasi Waktu Sewa minimal 7 hari" min="7" />
-    <div id="harga-info">Rp 10.000 per minggu (kisaran)</div>
 
-    <!-- Dropdown metode pembayaran -->
+    <p style="margin: 5px 0 10px; color: #ccc; font-size: 14px;">Rp 10.000 per minggu (kisaran)</p>
+
     <select id="metode">
       <option value="" disabled selected>Pilih Metode Pembayaran</option>
       <option value="qris">QRIS</option>
@@ -149,48 +150,43 @@
       shouldSort: false
     });
 
-    function formatRupiah(angka) {
-      return angka.toLocaleString('id-ID', {
-        style: 'currency',
-        currency: 'IDR',
-        minimumFractionDigits: 0
-      });
-    }
-
     function kirimWA() {
       let linkGC = document.getElementById('linkgc').value.trim();
-      let waktu = parseInt(document.getElementById('waktu').value.trim());
+      let waktu = document.getElementById('waktu').value.trim();
       let metode = document.getElementById('metode').value;
 
-      if (!linkGC || !linkGC.includes("chat.whatsapp.com")) {
-        return Swal.fire({
+      if (!linkGC.includes("chat.whatsapp.com")) {
+        Swal.fire({
           icon: 'error',
           title: 'URL Tidak Valid!',
           text: "Masukkan Link Grup Whatsapp Yang Valid",
           confirmButtonColor: '#ff0000'
         });
+        return;
       }
 
-      if (!waktu || waktu < 7) {
-        return Swal.fire({
+      if (!waktu.match(/^\d+$/) || waktu < 7) {
+        Swal.fire({
           icon: 'error',
           title: 'Durasi Sewa Tidak Valid!',
           text: "Minimal sewa adalah 7 hari!",
           confirmButtonColor: '#ff0000'
         });
+        return;
       }
 
       if (!metode) {
-        return Swal.fire({
+        Swal.fire({
           icon: 'error',
           title: 'Metode Belum Dipilih!',
           text: "Silakan pilih metode pembayaran terlebih dahulu.",
           confirmButtonColor: '#ff0000'
         });
+        return;
       }
 
       let hargaSewa = Math.ceil((waktu * 333.3333333) * 1.007);
-      let hargaFormat = formatRupiah(hargaSewa);
+      let hargaFormat = hargaSewa.toLocaleString('id-ID');
 
       Swal.fire({
         title: "Konfirmasi Sewa",
@@ -198,31 +194,20 @@
           <b>Link Grup:</b> ${linkGC} <br>
           <b>Durasi:</b> ${waktu} hari <br>
           <b>Metode:</b> ${metode} <br>
-          <b>Harga:</b> ${hargaFormat} <br><br>
+          <b>Harga:</b> Rp ${hargaFormat} <br><br>
           Setelah mengirim pesanan, bot akan mengirim info pembayaran.<br>
           Silakan lakukan pembayaran dalam waktu <b>15 menit</b> untuk menghindari pembatalan otomatis.
         `,
         icon: "info",
         showCancelButton: true,
-        confirmButtonText: "Ya, Order Sekarang!",
+        confirmButtonText: "Ya Order, Kirim Chat Ke Bot!",
         cancelButtonText: "Batal",
         confirmButtonColor: "#28a745",
         cancelButtonColor: "#d33"
       }).then((result) => {
         if (result.isConfirmed) {
-          Swal.fire({
-            title: 'Mengalihkan ke WhatsApp...',
-            text: 'Mohon tunggu sebentar',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            didOpen: () => {
-              Swal.showLoading();
-              setTimeout(() => {
-                let url = `https://wa.me/62856486407152?text=.sewa%20${encodeURIComponent(linkGC)}%20${waktu}%20${metode}`;
-                window.location.href = url;
-              }, 1500);
-            }
-          });
+          let url = `https://wa.me/62856486407152?text=.sewa%20${encodeURIComponent(linkGC)}%20${waktu}%20${metode}`;
+          window.location.href = url;
         }
       });
     }
