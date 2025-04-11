@@ -204,13 +204,25 @@
         cancelButtonText: "Batal",
         confirmButtonColor: "#28a745",
         cancelButtonColor: "#d33"
-      }).then((result) => {
+        }).then((result) => {
         if (result.isConfirmed) {
-          let url = `https://wa.me/62856486407152?text=.sewa%20${encodeURIComponent(linkGC)}%20${waktu}%20${metode}`;
-          window.location.href = url;
+          Swal.fire({
+            title: 'Mengalihkan ke WhatsApp...',
+            text: 'Mohon tunggu sebentar',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+              Swal.showLoading();
+              setTimeout(() => {
+                let url = `https://wa.me/62856486407152?text=.sewa%20${encodeURIComponent(linkGC)}%20${waktu}%20${metode}`;
+                window.location.href = url;
+              }, 1500);
+            }
+          });
         }
       });
     }
   </script>
 </body>
 </html>
+
