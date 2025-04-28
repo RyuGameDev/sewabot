@@ -155,7 +155,7 @@
       let waktu = document.getElementById('waktu').value.trim();
       let metode = document.getElementById('metode').value;
 
-      if (!linkGC.includes("chat.whatsapp.com")) {
+      if (!linkGC.startsWith("https://chat.whatsapp.com")) {
         Swal.fire({
           icon: 'error',
           title: 'URL Tidak Valid!',
