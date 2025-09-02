@@ -144,11 +144,28 @@
 
   <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
   <script>
+    // 🔒 MODE SEWA
+    const SEWA_OPEN = false; // ubah ke true kalau mau dibuka
+
     const choices = new Choices('#metode', {
       searchEnabled: false,
       itemSelectText: '',
       shouldSort: false
     });
+
+    window.onload = () => {
+      if (!SEWA_OPEN) {
+        Swal.fire({
+          icon: 'info',
+          title: 'Sewa Ditutup!',
+          text: 'Mohon maaf, saat ini penyewaan bot sedang ditutup.',
+          confirmButtonColor: '#ff0000'
+        });
+        document.querySelectorAll("input, select, button").forEach(el => {
+          el.disabled = true; // disable semua form
+        });
+      }
+    }
 
     function kirimWA() {
       let linkGC = document.getElementById('linkgc').value.trim();
@@ -225,4 +242,3 @@
   </script>
 </body>
 </html>
-
