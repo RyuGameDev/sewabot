@@ -202,7 +202,7 @@
         return;
       }
 
-      let hargaSewa = Math.ceil((waktu * 333.3333333) * 1.007);
+      let hargaSewa = Math.ceil((waktu * 497) * 1.007);
       let hargaFormat = hargaSewa.toLocaleString('id-ID');
 
       Swal.fire({
@@ -231,7 +231,7 @@
             didOpen: () => {
               Swal.showLoading();
               setTimeout(() => {
-                let url = `https://wa.me/62856486407153?text=.sewa%20${encodeURIComponent(linkGC)}%20${waktu}%20${metode}`;
+                let url = `https://wa.me/6283151964999?text=.sewa%20${encodeURIComponent(linkGC)}%20${waktu}%20${metode}`;
                 window.location.href = url;
               }, 1500);
             }
