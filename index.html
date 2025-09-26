@@ -90,7 +90,7 @@
         });
         document.querySelectorAll("input, select, button").forEach(el => el.disabled = true);
       } else {
-        // Kalau sewa open, tampilkan pengumuman dulu (jika aktif)
+        // Kalau sewa open
         if (PENGUMUMAN_AKTIF) {
           Swal.fire({
             icon: 'warning',
@@ -99,13 +99,21 @@
             confirmButtonText: 'Tutup',
             confirmButtonColor: '#ff0000'
           }).then(() => {
-            // Setelah pengumuman ditutup → tampilkan popup status sewa
+            // Setelah pengumuman → popup sewa dibuka
             Swal.fire({
               icon: 'success',
-              title: 'Sewa Dibuka!',
-              text: 'Silakan isi formulir untuk menyewa bot.',
+              title: 'Sewa Dibuka Slot Terbatas!',
+              text: 'Silakan isi formulir untuk menyewa bot isikan kolom url dengan linkgrub anda dan isi kolom hari hanya dengan angka contoh jika sewa sebulan ketik saja 30!',
               confirmButtonColor: '#28a745'
             });
+          });
+        } else {
+          // Kalau pengumuman mati → langsung popup sewa dibuka
+          Swal.fire({
+            icon: 'success',
+            title: 'Sewa Dibuka Slot Terbatas!',
+            text: 'Silakan isi formulir untuk menyewa bot isikan kolom url dengan linkgrub anda dan isi kolom hari hanya dengan angka contoh jika sewa sebulan ketik saja 30!',
+            confirmButtonColor: '#28a745'
           });
         }
       }
